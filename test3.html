@@ -12,6 +12,7 @@
         })*/
         let i=0;
         const cols=["red","blue","yellow","black"]
+        const ar0=["b1","b2","b3","b4"];
         function prssd(n){
             btn=document.getElementById(n);
             console.log('pressed');
@@ -35,16 +36,38 @@
             c = cols[j%cols.length];
             console.log('loop '+j);
             setTimeout(()=>{btn.style.backgroundColor=c;setButtonColor(btn,j+1);},1000);  
-            } 
-}
-/*
-        (function myLoop(i) {
-  setTimeout(function() {
-    console.log('hello'); //  your code here                
-    if (--i) myLoop(i);   //  decrement i and call myLoop again if i > 0
-  }, 3000)
-})(10);                   //  pass the number of iterations as an argument
-*/
+            }} 
+        function flashb(b,t){
+            btn=document.getElementById(b);
+            ic=btn.style.backgroundColor;
+            btn.style.backgroundColor="purple";
+            setTimeout(()=>{btn.style.backgroundColor=ic},t);
+        }
+        function initGame(){
+            btoggle(0,true,2);
+            let tt=1000;
+            
+            let ar1=["","","",""];
+            for(let i=0;i<4;i++){
+                ar1[i]="b"+(Math.floor(Math.random()*4+1)).toString();
+            }
+            for(let j=0;j<4;j++){
+                setTimeout(()=>{flashb(ar1[j],500);},1000*j);
+            }
+            btoggle(4000,false,1);
+            
+
+        }
+        function btoggle(timer,state,bn){
+            if(bn==1){
+            for(let u=0;u<4;u++){
+                setTimeout(()=>{document.getElementById(ar0[u]).disabled=state},timer);
+            }
+            }else if(bn==2){
+                console.log("2");
+                setTimeout(()=>{document.getElementById("start").disabled=state},timer);
+        }
+        }
 
     </script>
     <style>
@@ -52,15 +75,20 @@
             width:400px;
             height:400px;
             display:grid;
-            background-color: red;
-            border-radius:50%
+            background-color: black;
+            border-radius:50%;
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform: translateX(-50%) translateY(-50%);
+            
 
         }
-
 
         .wrapper {
             display: flex;
             justify-content: space-between;
+            
         }
 .wrapper>div{
 display:flex;
@@ -73,32 +101,34 @@ justify-content:space-between;
             background: yellow;
         }
         .circ{
-            width:100px;
-            height:100px;
+            width: 120px;
+            height:120px;
             border-radius: 50%;
-            background-color: black;
+            background-color: var(--col);
         }
     </style>
 </head>
 
 <body>
+    
     <div class="centr">
     <div class="wrapper">
         <div>
-            <button class='circ' id="b1" onclick="setButtonColor(this,0)"></button>
-            <div class='circ'></div>
+            <button class='circ' id="b1" style="--col:green" disabled onclick="setButtonColor(this,0)"></button>
+            <button class='circ' id="b3" style="--col:yellow" disabled ></button>
+        </div>
+        <div style="margin:auto; flex-direction: row;">
+        <div style="color:white;">TIME</div>
+        <button type="button" id="start" style="background-color: red;" onclick="initGame()">START</button>
+        <div style="color:white;">SCORE</div>
         </div>
         <div>
-        <button type="button" style="margin:auto;">START</button>
-        
-            
-        </div>
-        <div>
-            <div class='circ'></div>
-            <div class='circ'></div>
+            <button class='circ' id="b2" style="--col:red" disabled></button>
+            <button class='circ' id="b4" style="--col:blue" disabled></button>
         </div>
     </div>
     </div>
+
 </body>
 
 </html>
