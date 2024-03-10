@@ -16,21 +16,18 @@
             btn=document.getElementById(n);
             console.log('pressed');
             let m=0;
-            loop(m);
+            for (let j=0;j<10;j++){
+                setTimeout(loop(j),500);
+            }
             /*
             btn.style.backgroundColor=cols[i];
             i=(i+1)%cols.length;*/
         }
         function loop(m){
-            if(m<10){
-                console.log("loop"+m);
-                btn.style.backgroundColor=cols[i];
-                i=(i+1)%cols.length;
-                m=m+1;
-                setTimeout(loop(m),500);
+            i=m%cols.length;
+            console.log("loop"+m);
+            btn.style.backgroundColor=cols[i];
             }
-            else{}
-        }
 /*
         (function myLoop(i) {
   setTimeout(function() {
