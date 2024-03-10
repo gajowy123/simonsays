@@ -28,6 +28,15 @@
             console.log("loop"+m);
             btn.style.backgroundColor=cols[i];
             }
+
+        function setButtonColor(btn,j) {
+            c1 = btn.style.backgroundColor; 
+            if(j<10){
+            c = cols[j%cols.length];
+            console.log('loop '+j);
+            setTimeout(()=>{btn.style.backgroundColor=c;setButtonColor(btn,j+1);},1000);  
+            } 
+}
 /*
         (function myLoop(i) {
   setTimeout(function() {
@@ -76,7 +85,7 @@ justify-content:space-between;
     <div class="centr">
     <div class="wrapper">
         <div>
-            <button class='circ' id="b1" onclick="prssd('b1')"></button>
+            <button class='circ' id="b1" onclick="setButtonColor(this,0)"></button>
             <div class='circ'></div>
         </div>
         <div>
