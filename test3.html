@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<head>
+    <script>
+
+        /*const btn1 = document.getElementById("b1")
+        const cols = ["red","blue","yellow","black"]
+        let i = 0;
+        btn1.addEventListener('click', () => {
+            console.log('pressed');
+            btn1.style.backgroundColor=cols[i];
+            i=(i+1)%cols.length;
+        })*/
+        let i=0;
+        const cols=["red","blue","yellow","black"]
+        function prssd(n){
+            btn=document.getElementById(n);
+            console.log('pressed');
+            let m=0;
+            loop(m);
+            /*
+            btn.style.backgroundColor=cols[i];
+            i=(i+1)%cols.length;*/
+        }
+        function loop(m){
+            if(m<10){
+                console.log("loop"+m);
+                btn.style.backgroundColor=cols[i];
+                i=(i+1)%cols.length;
+                m=m+1;
+                setTimeout(loop(m),500);
+            }
+            else{}
+        }
+/*
+        (function myLoop(i) {
+  setTimeout(function() {
+    console.log('hello'); //  your code here                
+    if (--i) myLoop(i);   //  decrement i and call myLoop again if i > 0
+  }, 3000)
+})(10);                   //  pass the number of iterations as an argument
+*/
+
+    </script>
+    <style>
+        .centr{
+            width:400px;
+            height:400px;
+            display:grid;
+            background-color: red;
+            border-radius:50%
+
+        }
+
+
+        .wrapper {
+            display: flex;
+            justify-content: space-between;
+        }
+.wrapper>div{
+display:flex;
+flex-flow:wrap column;
+justify-content:space-between;
+}
+        .child {
+            width: 50px;
+            height: 50px;
+            background: yellow;
+        }
+        .circ{
+            width:100px;
+            height:100px;
+            border-radius: 50%;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="centr">
+    <div class="wrapper">
+        <div>
+            <button class='circ' id="b1" onclick="prssd('b1')"></button>
+            <div class='circ'></div>
+        </div>
+        <div>
+        <button type="button" style="margin:auto;">START</button>
+        
+            
+        </div>
+        <div>
+            <div class='circ'></div>
+            <div class='circ'></div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
