@@ -1,18 +1,6 @@
 <!DOCTYPE html>
 <head>
     <script>
-
-        /*const btn1 = document.getElementById("b1")
-        const cols = ["red","blue","yellow","black"]
-        let i = 0;
-        btn1.addEventListener('click', () => {
-            console.log('pressed');
-            btn1.style.backgroundColor=cols[i];
-            i=(i+1)%cols.length;
-        })*/
-        //const cols=["red","blue","yellow","black"]
-
-        let ar1=["","","",""]; 
         let bar=[];
         const ar0=["b1","b2","b3","b4"];
         let itt=0;
@@ -22,19 +10,6 @@
         let spd=1000;
         let ssq=0;
 
-        function loop(m){
-            i=m%cols.length;
-            console.log("loop"+m);
-            btn.style.backgroundColor=cols[i];
-            }
-
-        function setButtonColor(btn,j) {
-            c1 = btn.style.backgroundColor; 
-            if(j<10){
-            c = cols[j%cols.length];
-            console.log('loop '+j);
-            setTimeout(()=>{btn.style.backgroundColor=c;setButtonColor(btn,j+1);},1000);  
-            }} 
         function flashb(b,t){
             btn=document.getElementById(b);
             ic=btn.style.backgroundColor;
@@ -56,14 +31,6 @@
                 isGameRuined=false;
             }
              seqStart(nnm,spd);
-
-           /* for(let i=0;i<4;i++){
-                ar1[i]="b"+(Math.floor(Math.random()*4+1)).toString();
-            }
-            for(let j=0;j<4;j++){
-                setTimeout(()=>{flashb(ar1[j],tt/2);},tt*j);
-            }
-            btoggle(tt*4,false,1);*/
         }
         function seqStart(num,spd){
             bar = Array.apply(null, Array(num)).map(function () {})
@@ -82,12 +49,12 @@
 
         function seqFail(){
             for(let i=0;i<5;i++){
-                setTimeout(()=>{flashb("b1")})
+                setTimeout(()=>{flashb("b1",400);flashb("b2",400);flashb("b3",400);flashb("b4",400);},800*i);
             }
         }
         
         function btoggle(timer,state,bn){
-            strt=document.getElementById("start");
+            strt=document.getElementById("stt");
             if(bn==1){                                          // toggles colored buttons
             for(let u=0;u<4;u++){
                 if(state){t="red";}else{t="green";}
@@ -98,32 +65,29 @@
             }
         }
         function bpro(n){
-            console.log(n);
             if(itt<bar.length-1){
                 if(bar[itt]==n){
-                    console.log('1');
                     itt=itt+1;
                     ssq=ssq+1;
+                    addScore(1);
                     timr2(ssq,5);
                 }else{
-                    console.log('2');
-                                                      // could be also used when timer runs out
                     isGameRuined=true;
                     ssq=ssq+1;
+                    seqFail();
                     preGame();
                 }
             }else{
                 if(bar[itt]==n){
-                    console.log('3');
                     btoggle(0,true,1);
                     addScore(1);
                     ssq=ssq+1;
                     seqStart(bar.length+1,spd);
                     
                 }else{
-                    console.log('4');
                     btoggle(0,true,2);
                     isGameRuined=true;
+                    seqFail();
                     preGame();
                     
                 }
@@ -132,10 +96,10 @@
         function timr2(sq,t){
             
             if(sq==ssq){
-                console.log(sq,ssq);
                 if(t<0){
                     isGameRuined=true;
                     btoggle(0,true,2);
+                    seqFail();
                     preGame();
                 }else{
                 document.getElementById("tmr").innerHTML=t;
@@ -161,6 +125,13 @@
 
     </script>
     <style>
+        @font-face {
+                font-family: orbitron;
+                src: url(Orbitron-VariableFont_wght.ttf);
+        }
+        *{
+            font-family: orbitron;
+        }
         .centr{
             width:400px;
             height:400px;
@@ -186,9 +157,10 @@
             justify-content:space-between;  
         }
         .child {
-            width: 50px;
-            height: 50px;
-            background: yellow;
+            width: 10px;
+            height: 10px;
+            background: red;
+            border-radius: 50%;
         }
         .circ{
             width: 120px;
@@ -216,10 +188,12 @@
             <button class='circ' id="b3" style="--col:yellow;" disabled onclick="bpro(this.id)"></button>
         </div>
         <div style="margin:auto; flex-direction:row;position:absolute;top:50%;left:50%;transform: translateX(-50%) translateY(-50%);">
-        <div style="color:white;" id="tmr">TIME</div>
-        <button type="button" id="start" style="background-color: red;" onclick="initGame()">START</button>
         <div style="color:white;" id="scr">SCORE</div>
+        <button type="button" id="start" style="justify-content: center;" onclick="initGame()">START</button>
+        <div style="color:white;" id="tmr">TIME</div>
+        
         </div>
+        <div id="stt" style="color: white;position:absolute;top:60%;left:50%;transform: translateX(-50%) translateY(-50%);" class="child"></div>
         <div>
             <button class='circ' id="b2" style="--col:red;" disabled onclick="bpro(this.id)"></button>
             <button class='circ' id="b4" style="--col:blue;" disabled onclick="bpro(this.id)"></button>
