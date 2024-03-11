@@ -10,20 +10,13 @@
             btn1.style.backgroundColor=cols[i];
             i=(i+1)%cols.length;
         })*/
-        let i=0;
-        const cols=["red","blue","yellow","black"]
+        //const cols=["red","blue","yellow","black"]
+
+        let ar1=["","","",""]; 
         const ar0=["b1","b2","b3","b4"];
-        function prssd(n){
-            btn=document.getElementById(n);
-            console.log('pressed');
-            let m=0;
-            for (let j=0;j<10;j++){
-                setTimeout(loop(j),500);
-            }
-            /*
-            btn.style.backgroundColor=cols[i];
-            i=(i+1)%cols.length;*/
-        }
+        let itt=0;
+        let isGameRuined = false;
+
         function loop(m){
             i=m%cols.length;
             console.log("loop"+m);
@@ -46,28 +39,74 @@
         function initGame(){
             btoggle(0,true,2);
             let tt=1000;
-            
-            let ar1=["","","",""];  
+            if(isGameRuined){
+                addScore(0);
+            }
+             
             for(let i=0;i<4;i++){
                 ar1[i]="b"+(Math.floor(Math.random()*4+1)).toString();
             }
             for(let j=0;j<4;j++){
-                setTimeout(()=>{flashb(ar1[j],500);},1000*j);
+                setTimeout(()=>{flashb(ar1[j],tt/2);},tt*j);
             }
-            btoggle(4000,false,1);
+            btoggle(tt*4,false,1);
             
 
         }
         function btoggle(timer,state,bn){
-            if(bn==1){
+            strt=document.getElementById("start");
+            if(bn==1){                                          // toggles colored buttons
             for(let u=0;u<4;u++){
-                setTimeout(()=>{document.getElementById(ar0[u]).disabled=state},timer);
+                if(state){t="red";}else{t="green";}
+                setTimeout(()=>{document.getElementById(ar0[u]).disabled=state;strt.style.backgroundColor=t},timer);
             }
-            }else if(bn==2){
-                console.log("2");
-                setTimeout(()=>{document.getElementById("start").disabled=state},timer);
+            }else if(bn==2){                                    // toggles start button
+                setTimeout(()=>{strt.disabled=state;},timer);
+            }
         }
+        function bpro(n){
+            console.log(n);
+            if(itt<3){
+                if(ar1[itt]=n){
+                    itt=itt+1;
+                }else{
+                    btoggle(0,true,2);                          // could be also used when timer runs out
+                    isGameRuined=true;
+                }
+            }else{
+                if(ar1[itt]=n){
+                    btoggle(0,true,1);
+                    addScore(1);
+                }else{
+                    btoggle(0,true,2);
+                    isGameRuined=true;
+                    
+                }
+            }
         }
+        function timr(n){
+            document.getElementById("tmr")=0;                   // this should prolly be a recursive loop so
+                                                                // that it can stop when all buttons are pressed correctly
+            for(let tm=n;n>=0;tm--){
+                setTimeout(()=>{document.getElementById("tmr")=tm},1000*(n-tm));
+            }setTimeout(()=>{bpro('b5')},1000*n);
+        }
+        function timr2(t){
+
+        }
+        function addScore(n){
+            scc=document.getElementById("scr");
+            if(n==0){
+                scc.innerHTML=0;
+            }
+            else if(n==1){
+                if(scc.innerHTML=="SCORE"){
+                    scc.innerHTML=1;
+                }else{
+                    scc.innerHTML=pareseInt(scc.innerHTML)+1;
+            }}
+        }
+
 
     </script>
     <style>
@@ -90,11 +129,11 @@
             justify-content: space-between;
             
         }
-.wrapper>div{
-display:flex;
-flex-flow:wrap column;
-justify-content:space-between;
-}
+        .wrapper>div{
+            display:flex;
+            flex-flow:wrap column;
+            justify-content:space-between;  
+        }
         .child {
             width: 50px;
             height: 50px;
@@ -106,6 +145,14 @@ justify-content:space-between;
             border-radius: 50%;
             background-color: var(--col);
         }
+        .centwrap{
+            margin:auto; 
+            flex-direction:row;
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
     </style>
 </head>
 
@@ -114,17 +161,17 @@ justify-content:space-between;
     <div class="centr">
     <div class="wrapper">
         <div>
-            <button class='circ' id="b1" style="--col:green" disabled onclick="setButtonColor(this,0)"></button>
-            <button class='circ' id="b3" style="--col:yellow" disabled ></button>
+            <button class='circ' id="b1" style="--col:green;" disabled onclick="bpro(this)"></button>
+            <button class='circ' id="b3" style="--col:yellow;" disabled onclick="bpro(this)"></button>
         </div>
-        <div style="margin:auto; flex-direction: row;">
-        <div style="color:white;">TIME</div>
+        <div style="margin:auto; flex-direction:row;position:absolute;top:50%;left:50%;transform: translateX(-50%) translateY(-50%);">
+        <div style="color:white;" id="tmr">TIME</div>
         <button type="button" id="start" style="background-color: red;" onclick="initGame()">START</button>
-        <div style="color:white;">SCORE</div>
+        <div style="color:white;" id="scr">SCORE</div>
         </div>
         <div>
-            <button class='circ' id="b2" style="--col:red" disabled></button>
-            <button class='circ' id="b4" style="--col:blue" disabled></button>
+            <button class='circ' id="b2" style="--col:red;" disabled onclick="bpro(this)"></button>
+            <button class='circ' id="b4" style="--col:blue;" disabled onclick="bpro(this)"></button>
         </div>
     </div>
     </div>
