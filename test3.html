@@ -13,9 +13,14 @@
         //const cols=["red","blue","yellow","black"]
 
         let ar1=["","","",""]; 
+        let bar=[];
         const ar0=["b1","b2","b3","b4"];
         let itt=0;
-        let isGameRuined = false;
+        let nnm=1;
+        let isGameRuined = true;
+        let ovAlSig=0;
+        let spd=1000;
+        let ssq=0;
 
         function loop(m){
             i=m%cols.length;
@@ -36,23 +41,51 @@
             btn.style.backgroundColor="purple";
             setTimeout(()=>{btn.style.backgroundColor=ic},t);
         }
+        function preGame(){
+            btoggle(0,true,1);
+            btoggle(0,false,2);
+            ssq=-1;
+        }
         function initGame(){
             btoggle(0,true,2);
-            let tt=1000;
+            ssq=0;
             if(isGameRuined){
+                spd=1000;
                 addScore(0);
+                nnm=1;
+                isGameRuined=false;
             }
-             
-            for(let i=0;i<4;i++){
+             seqStart(nnm,spd);
+
+           /* for(let i=0;i<4;i++){
                 ar1[i]="b"+(Math.floor(Math.random()*4+1)).toString();
             }
             for(let j=0;j<4;j++){
                 setTimeout(()=>{flashb(ar1[j],tt/2);},tt*j);
             }
-            btoggle(tt*4,false,1);
-            
-
+            btoggle(tt*4,false,1);*/
         }
+        function seqStart(num,spd){
+            bar = Array.apply(null, Array(num)).map(function () {})
+            for(let i=0;i<num;i++){
+                bar[i]="b"+(Math.floor(Math.random()*4+1)).toString();
+            }
+            for(let j=0;j<num;j++){
+                setTimeout(()=>{flashb(bar[j],spd/2);},spd*j);
+                ovAlSig++;
+                if(ovAlSig==5 | ovAlSig==9 | ovAlSig==13){spd=spd-100;}
+            }
+            itt=0;
+            btoggle(spd*num,false,1);
+            setTimeout(()=>{timr2(ssq,5);},spd*num);
+        }
+
+        function seqFail(){
+            for(let i=0;i<5;i++){
+                setTimeout(()=>{flashb("b1")})
+            }
+        }
+        
         function btoggle(timer,state,bn){
             strt=document.getElementById("start");
             if(bn==1){                                          // toggles colored buttons
@@ -66,33 +99,51 @@
         }
         function bpro(n){
             console.log(n);
-            if(itt<3){
-                if(ar1[itt]=n){
+            if(itt<bar.length-1){
+                if(bar[itt]==n){
+                    console.log('1');
                     itt=itt+1;
+                    ssq=ssq+1;
+                    timr2(ssq,5);
                 }else{
-                    btoggle(0,true,2);                          // could be also used when timer runs out
+                    console.log('2');
+                                                      // could be also used when timer runs out
                     isGameRuined=true;
+                    ssq=ssq+1;
+                    preGame();
                 }
             }else{
-                if(ar1[itt]=n){
+                if(bar[itt]==n){
+                    console.log('3');
                     btoggle(0,true,1);
                     addScore(1);
+                    ssq=ssq+1;
+                    seqStart(bar.length+1,spd);
+                    
                 }else{
+                    console.log('4');
                     btoggle(0,true,2);
                     isGameRuined=true;
+                    preGame();
                     
                 }
             }
         }
-        function timr(n){
-            document.getElementById("tmr")=0;                   // this should prolly be a recursive loop so
-                                                                // that it can stop when all buttons are pressed correctly
-            for(let tm=n;n>=0;tm--){
-                setTimeout(()=>{document.getElementById("tmr")=tm},1000*(n-tm));
-            }setTimeout(()=>{bpro('b5')},1000*n);
-        }
-        function timr2(t){
-
+        function timr2(sq,t){
+            
+            if(sq==ssq){
+                console.log(sq,ssq);
+                if(t<0){
+                    isGameRuined=true;
+                    btoggle(0,true,2);
+                    preGame();
+                }else{
+                document.getElementById("tmr").innerHTML=t;
+                setTimeout(()=>{timr2(sq,t-1)},1000);
+                }
+            }else{
+                document.getElementById("tmr").innerHTML="TIME";
+            }
         }
         function addScore(n){
             scc=document.getElementById("scr");
@@ -103,7 +154,7 @@
                 if(scc.innerHTML=="SCORE"){
                     scc.innerHTML=1;
                 }else{
-                    scc.innerHTML=pareseInt(scc.innerHTML)+1;
+                    scc.innerHTML= parseInt(scc.innerHTML)+1;
             }}
         }
 
@@ -161,8 +212,8 @@
     <div class="centr">
     <div class="wrapper">
         <div>
-            <button class='circ' id="b1" style="--col:green;" disabled onclick="bpro(this)"></button>
-            <button class='circ' id="b3" style="--col:yellow;" disabled onclick="bpro(this)"></button>
+            <button class='circ' id="b1" style="--col:green;" disabled onclick="bpro(this.id)"></button>
+            <button class='circ' id="b3" style="--col:yellow;" disabled onclick="bpro(this.id)"></button>
         </div>
         <div style="margin:auto; flex-direction:row;position:absolute;top:50%;left:50%;transform: translateX(-50%) translateY(-50%);">
         <div style="color:white;" id="tmr">TIME</div>
@@ -170,8 +221,8 @@
         <div style="color:white;" id="scr">SCORE</div>
         </div>
         <div>
-            <button class='circ' id="b2" style="--col:red;" disabled onclick="bpro(this)"></button>
-            <button class='circ' id="b4" style="--col:blue;" disabled onclick="bpro(this)"></button>
+            <button class='circ' id="b2" style="--col:red;" disabled onclick="bpro(this.id)"></button>
+            <button class='circ' id="b4" style="--col:blue;" disabled onclick="bpro(this.id)"></button>
         </div>
     </div>
     </div>
